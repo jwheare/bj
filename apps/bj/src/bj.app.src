@@ -1,0 +1,15 @@
+{application, bj,
+ [{description, "An OTP application"}
+ ,{vsn, "1"}
+ ,{registered, []}
+ ,{mod, {'bj_app', []}}
+ ,{applications,
+   [kernel
+   ,stdlib
+   ,sync
+   ,syntax_tools
+   ,compiler
+   ]}
+ ,{env,[]}
+ ,{modules, []}
+ ]}.

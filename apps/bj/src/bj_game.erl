@@ -197,7 +197,7 @@ handle_call(hit, _From, State = #state{}) ->
     case is_bust(NewHand) of
         true ->
             {_Result, FinalState} = deal_out(NewState),
-            io:format("bust!~n"),
+            io:format("bust 😵~n"),
             {stop, normal, ok, FinalState};
         false ->
             render(NewState),
@@ -208,13 +208,13 @@ handle_call(hit, _From, State = #state{}) ->
 handle_call(stand, _From, State = #state{}) ->
     case deal_out(State) of
         {bust, FinalState} ->
-            io:format("you win!~n");
+            io:format("you win! 👍~n");
         {safe, FinalState} ->
             case get_winner(FinalState) of
                 {draw, blackjack} ->
-                    io:format("blackjack draw!~n", []);
+                    io:format("blackjack draw 🙀~n", []);
                 draw ->
-                    io:format("draw!~n", []);
+                    io:format("draw 😼~n", []);
                 {player, blackjack} ->
                     io:format("blackjack! you win 👍~n");
                 player ->

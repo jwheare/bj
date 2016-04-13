@@ -42,7 +42,7 @@ init([]) ->
         {
             bj_game, % Supervision id
             {bj_game, start_link, []}, % Start: Module, function, args
-            permanent, % restart mode (permanent | transient | temporary)
+            transient, % restart mode (permanent | transient | temporary)
             5000, % shutdown timeout (timeout | brutal_kill)
             worker, % child type (worker | supervisor)
             [bj_game] % modules [for code reloading during a release upgrade]

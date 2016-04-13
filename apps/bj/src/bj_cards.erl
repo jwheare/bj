@@ -4,11 +4,16 @@
 
 -export([deck/0, blackjack/1, hand_values/1, red/1]).
 
+deck_test_() ->
+    [{"deck_length_52", ?_assertMatch(
+        52, length(deck())
+    )}].
+
 deck() ->
-    (lists:seq($🂡, $🂮) -- [$🂬]) ++
-    (lists:seq($🂱, $🂾) -- [$🂼]) ++
-    (lists:seq($🃁, $🃎) -- [$🃌]) ++
-    (lists:seq($🃑, $🃞) -- [$🃜]).
+    (lists:seq($🂡, $🂮) -- "🂬") ++
+    (lists:seq($🂱, $🂾) -- "🂼") ++
+    (lists:seq($🃁, $🃎) -- "🃌") ++
+    (lists:seq($🃑, $🃞) -- "🃜").
 
 red(C) when C >= $🂱, C =< $🂾 ->
     true;

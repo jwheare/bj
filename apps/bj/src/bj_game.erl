@@ -233,10 +233,10 @@ handle_call(stand, _From, State = #state{}) ->
                     io:format("blackjack! you win 🎉~n");
                 player ->
                     io:format("you win 👍~n");
-                {Winner, blackjack} ->
-                    io:format("blackjack! ~s wins 😩~n", [Winner]);
-                Winner ->
-                    io:format("~s wins 😭~n", [Winner])
+                {dealer, blackjack} ->
+                    io:format("blackjack! dealer wins 😩~n");
+                dealer ->
+                    io:format("dealer wins 😭~n")
             end
     end,
     {stop, normal, ok, FinalState};

@@ -209,9 +209,9 @@ handle_call(stand, _From, State = #state{}) ->
         {bust, FinalState} ->
             case bj_cards:blackjack(State#state.player) of
                 true ->
-                    io:format("you win! 👍~n");
+                    io:format("blackjack! you win 🎉~n");
                 false ->
-                    io:format("blackjack! you win 🎉~n")
+                    io:format("you win! 👍~n")
             end;
         {safe, FinalState} ->
             case get_winner(FinalState) of

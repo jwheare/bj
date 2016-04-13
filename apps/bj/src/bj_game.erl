@@ -67,7 +67,8 @@ start_link() ->
 %%====================================================================
 
 new_deck() ->
-    [X || {_,X} <- lists:sort([{rand:uniform(), N} || N <- bj_cards:deck()])].
+    random:seed(os:timestamp()),
+    [X || {_,X} <- lists:sort([{random:uniform(), N} || N <- bj_cards:deck()])].
 
 do_render(State) ->
     do_render(State, false).

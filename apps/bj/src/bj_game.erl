@@ -70,6 +70,16 @@ new_deck() ->
     random:seed(os:timestamp()),
     [X || {_,X} <- lists:sort([{random:uniform(), N} || N <- bj_cards:deck()])].
 
+render_hand(Hand) ->
+    [begin
+        case bj_cards:red(C) of
+            true ->
+                io_lib:format("\e[31m~ts\e[0m", [[C]]);
+            false ->
+                C
+        end
+    end || C <- Hand].
+
 do_render(State) ->
     do_render(State, false).
 do_render(#state{dealer=Dealer, player=Player}, EndGame) ->
@@ -79,8 +89,8 @@ do_render(#state{dealer=Dealer, player=Player}, EndGame) ->
         false ->
              [$🂠 | tl(lists:reverse(Dealer))]
     end,
-    io:format("Dealer: ~ts~n", [DealerHand]),
-    io:format("Player: ~ts~n", [lists:reverse(Player)]),
+    io:format("Dealer: ~ts~n", [render_hand(DealerHand)]),
+    io:format("Player: ~ts~n", [render_hand(lists:reverse(Player))]),
     case EndGame of
         true ->
             io:format("Your hand: ~B~n", [best_hand_value(Player)]),

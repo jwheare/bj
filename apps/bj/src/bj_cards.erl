@@ -2,13 +2,20 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
--export([deck/0, blackjack/1, hand_values/1]).
+-export([deck/0, blackjack/1, hand_values/1, red/1]).
 
 deck() ->
     (lists:seq($🂡, $🂮) -- [$🂬]) ++
     (lists:seq($🂱, $🂾) -- [$🂼]) ++
     (lists:seq($🃁, $🃎) -- [$🃌]) ++
     (lists:seq($🃑, $🃞) -- [$🃜]).
+
+red(C) when C >= $🂱, C =< $🂾 ->
+    true;
+red(C) when C >= $🃁, C =< $🃎 ->
+    true;
+red(_C) ->
+    false.
 
 hand_values_test_() ->
     Tests = [

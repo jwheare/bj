@@ -13,6 +13,7 @@
 -export([
     hit/1
     , stand/1
+    , resume/1
 ]).
 
 %% supervisor api
@@ -44,6 +45,9 @@ hit(Pid) ->
 stand(Pid) ->
     gen_server:call(Pid, stand).
 
+resume(Pid) ->
+    gen_server:call(Pid, resume).
+
 %%====================================================================
 %% Supervisor api
 %%====================================================================
@@ -55,24 +59,19 @@ start_link() ->
         dealer=[D, B],
         player=[C, A]
     },
-    render(State),
-    prompt_player(),
+    do_render(State),
     gen_server:start_link(?MODULE, [State], []).
 
 %%====================================================================
 %% private api
 %%====================================================================
 
-prompt_player() ->
-    % io:format("enter one of: stand() hit()~n").
-    ok.
-
 new_deck() ->
     [X || {_,X} <- lists:sort([{rand:uniform(), N} || N <- bj_cards:deck()])].
 
-render(State) ->
-    render(State, false).
-render(#state{dealer=Dealer, player=Player}, EndGame) ->
+do_render(State) ->
+    do_render(State, false).
+do_render(#state{dealer=Dealer, player=Player}, EndGame) ->
     DealerHand = case EndGame of
         true ->
             lists:reverse(Dealer);
@@ -154,7 +153,7 @@ is_dealer_over(#state{dealer=Hand}) ->
 deal_out(State = #state{}) ->
     case is_dealer_over(State) of
         true ->
-            render(State, true),
+            do_render(State, true),
             case is_bust(State#state.dealer) of
                 true ->
                     {bust, State};
@@ -200,8 +199,7 @@ handle_call(hit, _From, State = #state{}) ->
             io:format("bust 😵~n"),
             {stop, normal, ok, FinalState};
         false ->
-            render(NewState),
-            prompt_player(),
+            do_render(NewState),
             {reply, ok, NewState}
     end;
 
@@ -226,6 +224,10 @@ handle_call(stand, _From, State = #state{}) ->
             end
     end,
     {stop, normal, ok, FinalState};
+
+handle_call(resume, _From, State) ->
+    do_render(State),
+    {reply, ok, State};
 
 handle_call(_Call, _From, State) ->
     {reply, ok, State}.

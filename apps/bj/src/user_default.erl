@@ -8,8 +8,19 @@ start() ->
 
 hit() ->
     G = get(game),
-    bj_game:hit(G).
+    bj_game:hit(G),
+    ok.
 
 stand() ->
     G = get(game),
-    bj_game:stand(G).
+    bj_game:stand(G),
+    ok.
+
+resume(N) ->
+    G = element(2, lists:nth(N, supervisor:which_children(bj_game_sup))),
+    put(game, G),
+    bj_game:resume(G),
+    ok.
+
+games() ->
+    length(supervisor:which_children(bj_game_sup)).

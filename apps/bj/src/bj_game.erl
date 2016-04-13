@@ -149,7 +149,7 @@ is_bust(Hand) ->
     min_hand_value(Hand) > 21.
 
 is_dealer_over(#state{dealer=Hand}) ->
-    min_hand_value(Hand) >= 17.
+    best_hand_value(Hand) >= 17.
 
 deal_out(State = #state{}) ->
     case is_dealer_over(State) of
@@ -207,7 +207,12 @@ handle_call(hit, _From, State = #state{}) ->
 handle_call(stand, _From, State = #state{}) ->
     case deal_out(State) of
         {bust, FinalState} ->
-            io:format("you win! 👍~n");
+            case bj_cards:blackjack(State#state.player) of
+                true ->
+                    io:format("you win! 👍~n");
+                false ->
+                    io:format("blackjack! you win 🎉~n")
+            end;
         {safe, FinalState} ->
             case get_winner(FinalState) of
                 {draw, blackjack} ->
@@ -215,13 +220,13 @@ handle_call(stand, _From, State = #state{}) ->
                 draw ->
                     io:format("draw 😼~n", []);
                 {player, blackjack} ->
-                    io:format("blackjack! you win 👍~n");
+                    io:format("blackjack! you win 🎉~n");
                 player ->
                     io:format("you win 👍~n");
                 {Winner, blackjack} ->
                     io:format("blackjack! ~s wins 😩~n", [Winner]);
                 Winner ->
-                    io:format("~s wins 😩~n", [Winner])
+                    io:format("~s wins 😭~n", [Winner])
             end
     end,
     {stop, normal, ok, FinalState};

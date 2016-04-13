@@ -10,4 +10,10 @@ start().
 hit().
 
 stand().
+
+% List how many games are ongoing
+games().
+
+% Resume a numbered game
+resume(N).
 ```
